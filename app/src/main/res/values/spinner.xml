@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Chapter">
+        <item>Chapter1</item>
+        <item>Chapter2</item>
+        <item>Chapter3</item>
+        <item>Chapter4</item>
+        <item>Chapter5</item>
+        <item>Chapter6</item>
+        <item>Chapter7</item>
+        <item>Chapter8</item>
+    </string-array>
+</resources>

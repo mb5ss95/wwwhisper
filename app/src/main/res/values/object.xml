@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="object">
+        <item>직접 녹음하기</item>
+        <item>텍스트 쓰기</item>
+        <item>녹음파일 올리기</item>
+    </string-array>
+
+</resources>

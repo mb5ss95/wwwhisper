@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:orientation="vertical"
+    tools:context=".Upload">
+
+
+
+    <TextView
+        android:id="@+id/upload_txt1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="[닉네임] 아무오디오"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/choose"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:background="#F8ECEC"
+        android:text="파일 선택하기" />
+
+    <TextView
+        android:id="@+id/upload_txt2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"/>
+
+    <ImageButton
+        android:id="@+id/upload"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="#FAFAFA"
+        android:text="업로드 하기"
+        android:src="@drawable/up"
+        android:visibility="invisible" />
+
+</LinearLayout>

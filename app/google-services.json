@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "187865095611",
+    "firebase_url": "https://project-83e1e.firebaseio.com",
+    "project_id": "project-83e1e",
+    "storage_bucket": "project-83e1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187865095611:android:e745fadcbb2baa5a0eb89e",
+        "android_client_info": {
+          "package_name": "com.example.wwwhisper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187865095611-dulc29o56btpivqq2trb36d42u2jbvnq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7KoxoZK4ce4b_FYVRUmH9HteKY36kdfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "187865095611-dulc29o56btpivqq2trb36d42u2jbvnq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
