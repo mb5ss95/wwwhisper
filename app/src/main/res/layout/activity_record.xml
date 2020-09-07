@@ -9,17 +9,16 @@
     android:orientation="vertical"
     tools:context=".Record">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6">
 
-        <TextView
-            android:id="@+id/txt1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="30dp" />
+            <TextView
+                android:id="@+id/txt1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="30dp" />
 
     </ScrollView>
 
