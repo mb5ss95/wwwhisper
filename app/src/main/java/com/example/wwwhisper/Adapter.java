@@ -48,16 +48,16 @@ class Adapter extends BaseAdapter {
 
         String[] temp = al.get(position).split(" ");
 
-        for(int i=2; i<temp.length; i++){
+        for (int i = 2; i < temp.length; i++) {
             temp[1] = temp[1] + " " + temp[i];
         }
+        if (temp.length > 1) {
+            System.out.println("(Adapter) Get Writer_Name & File_Name : " + temp[0] + ", " + temp[1]);
+            //(Adapter) Get Writer_Name & File_Name : [문병수], nako1.jpg
 
-        System.out.println("(Adapter) Get Writer_Name & File_Name : " + temp[0] + ", " + temp[1]);
-        //(Adapter) Get Writer_Name & File_Name : [문병수], nako1.jpg
-
-        tv1.setText(temp[0]);
-        tv2.setText(temp[1]);
-
+            tv1.setText(temp[0]);
+            tv2.setText(temp[1]);
+        }
         return convertView;
     }
 }

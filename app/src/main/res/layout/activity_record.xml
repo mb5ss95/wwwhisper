@@ -4,69 +4,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#FFFFFF"
     android:layout_margin="10dp"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
     tools:context=".Record">
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3" >
+        android:layout_weight="6">
 
         <TextView
+            android:id="@+id/txt1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="1"
-            android:textSize="30dp"
-            android:id="@+id/txt2"/>
+            android:textSize="30dp" />
 
     </ScrollView>
 
-    <LinearLayout
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true"
+        android:background="#BDBDBD" />
+
+    <Chronometer
+        android:id="@+id/ch"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:orientation="horizontal" >
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingTop="30dp"
+        android:visibility="invisible"
+        android:textSize="25dp"
+        android:textColor="#7C7C7C"/>
 
-        <Chronometer
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:id="@+id/ch"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="0.5">
+        android:layout_weight="2"
+        android:paddingBottom="30dp">
 
 
         <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/record"
-            android:background="#FFFFFF"
+            android:id="@+id/btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:id="@+id/btn1" />
-
+            android:background="#ffffff"
+            android:src="@drawable/record" />
 
 
         <ImageButton
             android:id="@+id/btn2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:src="@drawable/stop" />
-    </LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#ffffff"
+            android:src="@drawable/stop"
+            android:visibility="invisible"
+             />
+
+        <ImageButton
+            android:id="@+id/btn3"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:clickable="false"
+            android:background="@drawable/eyes" />
+
+    </FrameLayout>
+
 
 </LinearLayout>

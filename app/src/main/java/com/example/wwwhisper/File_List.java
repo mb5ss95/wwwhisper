@@ -35,7 +35,8 @@ public class File_List extends AppCompatActivity implements View.OnClickListener
 
     StorageReference storageRef;
 
-    ArrayList<String> file_list;
+    ArrayList<String> audio_list;
+    ArrayList<String> text_list;
 
     FloatingActionButton fab_main, fab_sub1, fab_sub2, fab_sub3;
     Animation fab_open, fab_close;
@@ -87,7 +88,8 @@ public class File_List extends AppCompatActivity implements View.OnClickListener
     }
 
     public void init_file() {
-        file_list = new ArrayList<>();
+        audio_list = new ArrayList<>();
+        text_list = new ArrayList<>();
 
         storageRef.listAll()
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
@@ -97,12 +99,17 @@ public class File_List extends AppCompatActivity implements View.OnClickListener
                             //System.out.println(listResult.getItems());
                             //[gs://project-83e1e.appspot.com/test/song1.mp3, gs://project-83e1e.appspot.com/test/song2.mp3, gs://project-83e1e.appspot.com/test/song3.mp3, gs://project-83e1e.appspot.com/test/song4.mp3]
                             String temp = item.getName();
+                            int len = temp.length();
                             if (temp.split(" ")[0].equals("[관리자]")) {
                                 image_name = temp;
                                 System.out.println("(File_List) Get Image Name : " + image_name);
                                 //(File_List) Get Image Name : [관리자] nako555.jpg
                             } else {
-                                file_list.add(temp);
+                                if (temp.substring(len - 4).equals(".mp3")) {
+                                    audio_list.add(temp);
+                                } else if (temp.substring(len - 4).equals(".txt")) {
+                                    text_list.add(temp);
+                                }
                             }
                         }
                         init_listView();
@@ -125,12 +132,12 @@ public class File_List extends AppCompatActivity implements View.OnClickListener
         listView.setAdapter(new Adapter(
                 getApplicationContext(),
                 R.layout.list_item,
-                file_list));
+                audio_list));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String file_name = file_list.get(position);
+                String file_name = audio_list.get(position);
                 String temp = file_name.substring(file_name.length() - 4);
 
                 if (temp.equals(".mp3")) {
