@@ -15,6 +15,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,13 +35,8 @@ import java.io.IOException;
 
 public class Show extends Activity implements Button.OnClickListener {
 
-
-    String directory_name;
-
     int progress = 0;
     int cnt;
-
-    StorageReference storageRef;
 
     ImageButton btn_start, btn_pause, btn_forward;
     ImageView img;
@@ -52,11 +48,8 @@ public class Show extends Activity implements Button.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_show);
-
         cnt = 0;
 
-        init_wiget();
         init_name_path();
     }
 
@@ -144,44 +137,62 @@ public class Show extends Activity implements Button.OnClickListener {
     private void init_name_path() {
         Intent intent = getIntent();
 
-        directory_name = intent.getStringExtra("directory_name");
-
+        String directory_name = intent.getStringExtra("directory_name");
+        String id_name = intent.getStringExtra("id_name");
         final String image_name = intent.getStringExtra("image_name");
-        final String audio_name = intent.getStringExtra("audio_name");
-        String audio_path;
+        final String file_name = intent.getStringExtra("file_name");
 
-        storageRef = FirebaseStorage.getInstance().getReference().child(directory_name);
 
-        audio_path = storageRef + "/" + audio_name;
+        if (file_name.substring(file_name.length() - 4).equals(".txt")) {
+            setContentView(R.layout.activity_show2);
 
-        System.out.println("(Show) Get Directory Name : " + directory_name);
-        System.out.println("(Show) Get Image Name & Audio Name : " + image_name + ", " + audio_name);
-        System.out.println("(Show) Get Storage Reference : " + storageRef);
-        //(Show) Get Directory Name : story1
-        //(Show) Get Image Name & Audio Name : [관리자] nako4.jpg, [문병수] song4.mp3
-        //(Show) Get Storage Reference : gs://project-83e1e.appspot.com/story1
+            //init_image(directory_name + "/" + image_name);
+            init_text(directory_name + "/" + id_name + "/" + file_name);
+        } else {
+            setContentView(R.layout.activity_show);
+            init_wiget();
 
-        String[] temp = audio_name.split(" ");
+            String audio_path = FirebaseStorage.getInstance().getReference().child(directory_name) + "/" + id_name + "/" + file_name;
 
-        for(int i=2; i<temp.length; i++){
-            temp[1] = temp[1] + " " + temp[i];
+            init_image(directory_name + "/" + image_name);
+            init_audio(audio_path);
         }
 
-        TextView txt = findViewById(R.id.txt);
-        txt.setText(temp[1]);
 
-        init_image(directory_name + "/" + image_name);
-        init_audio(audio_path);
+        TextView txt = findViewById(R.id.txt);
+        txt.setText(file_name);
+
 
         txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cnt++;
                 if (cnt == 10) {
-                    Toast.makeText(Show.this, image_name + ", " + audio_name,
+                    Toast.makeText(Show.this, image_name + ", " + file_name,
                             Toast.LENGTH_SHORT).show();
                     cnt = 0;
                 }
+            }
+        });
+    }
+
+    private void init_text(String temp) {
+        //long ONE_MEGABYTE = 1024 * 1024;
+        System.out.println("(Show) Get Image Name & Audio Name22222222222222222222222222222 : " + temp);
+        FirebaseStorage.getInstance().getReference().child(temp).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                TextView txt1 = findViewById(R.id.txt1);
+                txt1.setText(new String(bytes));
+
+                ProgressBar progressBar = findViewById(R.id.progress);
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(Show.this, "텍스트를 불러올 수 없습니다. 잠시 후 다시 시도하세요.",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -190,10 +201,7 @@ public class Show extends Activity implements Button.OnClickListener {
     private void init_audio(String temp) {
         //  gs://test-a526e.appspot.com/directory_name/file_name
 
-        storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(temp);
-        //  gs://test-a526e.appspot.com/%EB%B9%A8%EA%B0%95%EB%A8%B8%EB%A6%AC%20%EC%95%A4/file_name
-
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        FirebaseStorage.getInstance().getReferenceFromUrl(temp).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 try {
@@ -229,10 +237,7 @@ public class Show extends Activity implements Button.OnClickListener {
     private void init_image(String temp) {
         //  directory_name/file_name
 
-        storageRef = FirebaseStorage.getInstance().getReference().child(temp);
-        //  gs://test-a526e.appspot.com/%EB%B9%A8%EA%B0%95%EB%A8%B8%EB%A6%AC%20%EC%95%A4/file_name
-
-        storageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+        FirebaseStorage.getInstance().getReference().child(temp).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {

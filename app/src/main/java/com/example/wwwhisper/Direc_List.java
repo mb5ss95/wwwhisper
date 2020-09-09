@@ -30,15 +30,7 @@ import java.util.ArrayList;
 
 public class Direc_List extends AppCompatActivity {
 
-    ListView listView;
-
-    String directory_name;
-
-    FirebaseStorage storage;
-    StorageReference storageRef;
-
     ArrayList<String> directory_list;
-    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +91,9 @@ public class Direc_List extends AppCompatActivity {
     public void init_listView() {
 
         // adapterView
-        listView = findViewById(R.id.directory_list);
+        ListView listView = findViewById(R.id.directory_list);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        adapter = new ArrayAdapter<>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getApplicationContext(),
                 android.R.layout.simple_list_item_1,
                 directory_list);
@@ -110,9 +102,9 @@ public class Direc_List extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                directory_name = directory_list.get(position);
+                String directory_name = directory_list.get(position);
 
-                Intent intent = new Intent(getApplicationContext(), File_List.class);
+                Intent intent = new Intent(getApplicationContext(), ID_List.class);
                 intent.putExtra("directory_name", directory_name);
                 startActivity(intent);
             }
@@ -121,20 +113,16 @@ public class Direc_List extends AppCompatActivity {
 
     public void init_directory() {
         directory_list = new ArrayList<>();
-        storage = FirebaseStorage.getInstance();
 
-        storageRef = storage.getReference(); // 'gs://project-83e1e.appspot.com/'
-
-        //storageRef = storage.getReference().child("/test");
-
-        storageRef.listAll()
+        FirebaseStorage.getInstance().getReference().listAll()
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
                     @Override
                     public void onSuccess(ListResult listResult) {
                         for (StorageReference prefix : listResult.getPrefixes()) {
                             directory_list.add(prefix.getName());
                         }
-                        adapter.notifyDataSetChanged();
+                        init_listView();
+                        //adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

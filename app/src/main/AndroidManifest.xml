@@ -41,6 +41,10 @@
             android:label="wwwhisper" />
 
         <activity
+            android:name="com.example.wwwhisper.ID_List"
+            android:label="wwwhisper" />
+
+        <activity
             android:name="com.example.wwwhisper.Show"
             android:theme="@android:style/Theme.Material.Dialog.NoActionBar" />
 

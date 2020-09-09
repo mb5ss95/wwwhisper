@@ -9,18 +9,34 @@
     android:orientation="vertical"
     tools:context=".Record">
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6">
+        android:layout_weight="6"
+        android:layout_margin="10dp">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/Widget.MaterialComponents.Snackbar.TextView"
+            android:layout_gravity="center" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/txt1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="30dp" />
+                android:textSize="25dp"
+                android:textColor="#686868"/>
 
-    </ScrollView>
+        </ScrollView>
+
+
+    </FrameLayout>
 
     <View
         android:layout_width="match_parent"
@@ -52,6 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="#ffffff"
+            android:clickable="false"
             android:src="@drawable/record" />
 
 

@@ -8,10 +8,18 @@
     android:orientation="vertical"
     tools:context=".Direc_List">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="원하는 스토리를 선택하세요."
+        android:gravity="center"/>
+
     <ListView
         android:id="@+id/directory_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="11"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
 </LinearLayout>
