@@ -149,8 +149,6 @@ public class Upload extends AppCompatActivity implements Button.OnClickListener 
             progressDialog.show();
             storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(storageRef + "").child(id_name+"/" + file_name);
 
-            System.out.println("(upload) Get Storage Reference : " + storageRef);
-
             storageRef.putFile(file_path)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

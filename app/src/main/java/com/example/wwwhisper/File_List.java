@@ -27,7 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 
-public class File_List extends AppCompatActivity{
+public class File_List extends AppCompatActivity {
 
     String directory_name;
     String image_name;
@@ -69,20 +69,24 @@ public class File_List extends AppCompatActivity{
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
                     @Override
                     public void onSuccess(ListResult listResult) {
-                        for (StorageReference item : listResult.getItems()) {
-                            //System.out.println(listResult.getItems());
-                            //[gs://project-83e1e.appspot.com/test/song1.mp3, gs://project-83e1e.appspot.com/test/song2.mp3, gs://project-83e1e.appspot.com/test/song3.mp3, gs://project-83e1e.appspot.com/test/song4.mp3]
-                            String temp = item.getName();
-                            int len = temp.length();
-                            if (temp.substring(len - 4).equals(".txt")) {
-                                text_list.add(temp);
-                            } else {
-                                audio_list.add(temp);
-                            }
-                        }
                         ArrayList<String> file_list = new ArrayList<>();
-                        file_list.addAll(audio_list);
-                        file_list.addAll(text_list);
+                        if (listResult.getItems().isEmpty()) {
+                            file_list.add("데이터가 없습니다.");
+                        } else {
+                            for (StorageReference item : listResult.getItems()) {
+                                //System.out.println(listResult.getItems());
+                                //[gs://project-83e1e.appspot.com/test/song1.mp3, gs://project-83e1e.appspot.com/test/song2.mp3, gs://project-83e1e.appspot.com/test/song3.mp3, gs://project-83e1e.appspot.com/test/song4.mp3]
+                                String temp = item.getName();
+                                int len = temp.length();
+                                if (temp.substring(len - 4).equals(".txt")) {
+                                    text_list.add(temp);
+                                } else {
+                                    audio_list.add(temp);
+                                }
+                            }
+                            file_list.addAll(audio_list);
+                            file_list.addAll(text_list);
+                        }
                         init_listView(file_list);
                     }
                 })
@@ -107,19 +111,22 @@ public class File_List extends AppCompatActivity{
                 file_list);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String file_name = file_list.get(position);
 
-                Intent intent = new Intent(getApplicationContext(), Show.class);
-                intent.putExtra("directory_name", directory_name);
-                intent.putExtra("id_name", id_name);
-                intent.putExtra("file_name", file_name);
-                intent.putExtra("image_name", image_name);
-                startActivity(intent);
-            }
-        });
+        if (file_list.get(0) != "데이터가 없습니다.") {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String file_name = file_list.get(position);
+
+                    Intent intent = new Intent(getApplicationContext(), Show.class);
+                    intent.putExtra("directory_name", directory_name);
+                    intent.putExtra("id_name", id_name);
+                    intent.putExtra("file_name", file_name);
+                    intent.putExtra("image_name", image_name);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     public void init_title() {

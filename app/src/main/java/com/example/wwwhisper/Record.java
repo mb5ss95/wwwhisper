@@ -213,6 +213,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(Record.this, "텍스트를 불러올 수 없습니다. 잠시 후 다시 시도하세요.",
                         Toast.LENGTH_SHORT).show();
+                btn1.setClickable(true); //44444444444444444444444444444444444444444444444여기여기 수정
             }
         });
     }
@@ -238,21 +239,20 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             switch (v.getId()) {
                 case R.id.btn1:
-                    init_recorder();
+                    //init_recorder();
                     ch.setBase(SystemClock.elapsedRealtime());
                     ch.setAnimation(show);
                     ch.setVisibility(View.VISIBLE);
                     ch.start();
-                    save();
 
                     set_wiget_state1();
                     break;
 
                 case R.id.btn2:
-                    stopRecording();
+                    //stopRecording();
                     ch.setVisibility(View.INVISIBLE);
                     ch.stop();
-                    upload_file(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, "[test] test.mp3");
+                    //upload_file(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, "[test] test.mp3");
                     set_wiget_state2();
                     break;
             }
