@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
@@ -11,15 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="원하는 챕터를 선택하세요."
-        android:gravity="center"/>
-
+        android:gravity="center"
+        android:text="원하는 챕터를 선택하세요." />
 
     <ListView
         android:id="@+id/file_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
-        android:layout_weight="11" />
+        android:layout_weight="11"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
 </LinearLayout>

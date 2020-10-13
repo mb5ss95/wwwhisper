@@ -3,11 +3,8 @@ package com.example.wwwhisper;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -19,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
@@ -30,11 +26,10 @@ import java.util.ArrayList;
 public class File_List extends AppCompatActivity {
 
     String directory_name;
-    String image_name;
     String id_name;
 
-    ArrayList<String> audio_list;
-    ArrayList<String> text_list;
+    Adapter adapter = new Adapter();
+    ArrayList<String> image_list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,51 +38,45 @@ public class File_List extends AppCompatActivity {
 
         init_title();
         init_name_path();
+        init_file();
     }
 
 
-    @Override
+    /*@Override
     public void onResume() {
         super.onResume();
         init_file();
-    }
+    }*/
 
     private void init_name_path() {
         Intent intent = getIntent();
 
         directory_name = intent.getStringExtra("directory_name");
-        image_name = intent.getStringExtra("image_name");
+        image_list = (ArrayList<String>) intent.getSerializableExtra("image_list");
         id_name = intent.getStringExtra("id_name");
         //directory_name
     }
 
     public void init_file() {
-        audio_list = new ArrayList<>();
-        text_list = new ArrayList<>();
 
         FirebaseStorage.getInstance().getReference().child(directory_name + "/" + id_name).listAll()
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
                     @Override
                     public void onSuccess(ListResult listResult) {
-                        ArrayList<String> file_list = new ArrayList<>();
-                        if (listResult.getItems().isEmpty()) {
-                            file_list.add("데이터가 없습니다.");
-                        } else {
-                            for (StorageReference item : listResult.getItems()) {
-                                //System.out.println(listResult.getItems());
-                                //[gs://project-83e1e.appspot.com/test/song1.mp3, gs://project-83e1e.appspot.com/test/song2.mp3, gs://project-83e1e.appspot.com/test/song3.mp3, gs://project-83e1e.appspot.com/test/song4.mp3]
-                                String temp = item.getName();
-                                int len = temp.length();
-                                if (temp.substring(len - 4).equals(".txt")) {
-                                    text_list.add(temp);
-                                } else {
-                                    audio_list.add(temp);
-                                }
+                        ArrayList<String> audio_list = new ArrayList<>();
+                        ArrayList<String> text_list = new ArrayList<>();
+                        for (StorageReference item : listResult.getItems()) {
+                            //System.out.println(listResult.getItems());
+                            //[gs://project-83e1e.appspot.com/test/song1.mp3, gs://project-83e1e.appspot.com/test/song2.mp3, gs://project-83e1e.appspot.com/test/song3.mp3, gs://project-83e1e.appspot.com/test/song4.mp3]
+                            String temp = item.getName();
+                            int len = temp.length();
+                            if (temp.substring(len - 4).equals(".txt")) {
+                                text_list.add(temp);
+                            } else {
+                                audio_list.add(temp);
                             }
-                            file_list.addAll(audio_list);
-                            file_list.addAll(text_list);
                         }
-                        init_listView(file_list);
+                        init_data(audio_list, text_list);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -100,33 +89,65 @@ public class File_List extends AppCompatActivity {
                 });
     }
 
-    public void init_listView(final ArrayList<String> file_list) {
+    public void init_data(ArrayList<String> audio_list, ArrayList<String> text_list) {
+        for (int i = 0; i < image_list.size(); i++) {
+            String image_name = image_list.get(i);
+            String audio_name = "";
+            String text_name = "";
 
+            int image_num = image_name.length() - 4;
+            int audio_num = 0;
+            int text_num = 0;
+
+            try {
+                audio_name = audio_list.get(i);
+                audio_num = audio_name.length() - 4;
+            } catch (IndexOutOfBoundsException e) {
+            }
+            try {
+                text_name = text_list.get(i);
+                text_num = text_name.length() - 4;
+            } catch (IndexOutOfBoundsException e) {
+            }
+
+            image_name = image_name.substring(0, image_num);
+
+            if (!image_name.equals(audio_name.substring(0, audio_num))) {
+                audio_list.add(i, "-");
+            }
+            if (!image_name.equals(text_name.substring(0, text_num))) {
+                text_list.add(i, "-");
+            }
+
+            adapter.addItem(image_list.get(i), audio_list.get(i), text_list.get(i));
+        }
+        init_listView();
+
+    }
+
+    public void init_listView() {
         // adapterView
         ListView listView = findViewById(R.id.file_list);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getApplicationContext(),
-                android.R.layout.simple_list_item_1,
-                file_list);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Data data = adapter.getItem(position);
+                String image_name = data.get_chapter();
+                String audio_name = data.get_audio();
+                String text_name = data.get_text();
 
-        if (file_list.get(0) != "데이터가 없습니다.") {
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String file_name = file_list.get(position);
-
-                    Intent intent = new Intent(getApplicationContext(), Show.class);
-                    intent.putExtra("directory_name", directory_name);
-                    intent.putExtra("id_name", id_name);
-                    intent.putExtra("file_name", file_name);
-                    intent.putExtra("image_name", image_name);
-                    startActivity(intent);
-                }
-            });
-        }
+                Intent intent = new Intent(getApplicationContext(), Show.class);
+                intent.putExtra("directory_name", directory_name);
+                intent.putExtra("id_name", id_name);
+                intent.putExtra("image_name", image_name);
+                intent.putExtra("audio_name", audio_name);
+                intent.putExtra("text_name", text_name);
+                startActivity(intent);
+            }
+        });
     }
 
     public void init_title() {

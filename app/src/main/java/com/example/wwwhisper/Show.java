@@ -12,11 +12,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +29,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 
 
-public class Show extends Activity implements Button.OnClickListener {
+public class Show extends Activity implements View.OnClickListener {
 
     int progress = 0;
     int cnt;
@@ -41,31 +41,38 @@ public class Show extends Activity implements Button.OnClickListener {
     ImageButton btn_start, btn_pause, btn_forward;
     ImageView img;
     SeekBar seek;
+    Switch check;
+    TextView txt;
 
-    MediaPlayer audio_player;
+    MediaPlayer audio_player = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.dialog_show);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         cnt = 0;
 
+        init_wiget();
         init_name_path();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void init_wiget() {
 
+        txt = findViewById(R.id.txt1);
         img = findViewById(R.id.img);
         seek = findViewById(R.id.seekBar);
+        check = findViewById(R.id.check);
 
         btn_start = findViewById(R.id.btn_play);
         btn_pause = findViewById(R.id.btn_pause);
         btn_forward = findViewById(R.id.btn_forward);
 
+
         btn_start.setOnClickListener(Show.this);
         btn_pause.setOnClickListener(Show.this);
-        btn_forward.setOnClickListener(Show.this);
+        check.setOnClickListener(Show.this);
 
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -92,7 +99,6 @@ public class Show extends Activity implements Button.OnClickListener {
         btn_forward.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (audio_player.isPlaying()) {
@@ -119,61 +125,26 @@ public class Show extends Activity implements Button.OnClickListener {
         });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (audio_player != null) {
-            audio_player.pause();
-            SystemClock.sleep(300);
-            audio_player.release();
-        }
-
-        Show.this.finish();
-        //super.onBackPressed();
-    }
-
 
     private void init_name_path() {
         Intent intent = getIntent();
 
-        String directory_name = intent.getStringExtra("directory_name");
-        String id_name = intent.getStringExtra("id_name");
+        final String directory_name = intent.getStringExtra("directory_name");
+        final String id_name = intent.getStringExtra("id_name");
         final String image_name = intent.getStringExtra("image_name");
-        final String file_name = intent.getStringExtra("file_name");
+        final String audio_name = intent.getStringExtra("audio_name");
+        final String text_name = intent.getStringExtra("text_name");
 
+        //String audio_path = FirebaseStorage.getInstance().getReference().child(directory_name) + "/" + id_name + "/" + audio_name;
 
-        if (file_name.substring(file_name.length() - 4).equals(".txt")) {
-            setContentView(R.layout.activity_show2);
-
-            //init_image(directory_name + "/" + image_name);
-            init_text(directory_name + "/" + id_name + "/" + file_name);
-        } else {
-            setContentView(R.layout.activity_show);
-            init_wiget();
-
-            String audio_path = FirebaseStorage.getInstance().getReference().child(directory_name) + "/" + id_name + "/" + file_name;
-
-            init_image(directory_name + "/" + image_name);
-            init_audio(audio_path);
-        }
-
+        init_image(directory_name + "/" + image_name);
+        init_audio(directory_name + "/" + id_name + "/" + audio_name);
+        init_text(directory_name + "/" + id_name + "/" + text_name);
 
         TextView txt = findViewById(R.id.txt);
-        txt.setText(file_name);
-
-
-        txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cnt++;
-                if (cnt == 10) {
-                    Toast.makeText(Show.this, image_name + ", " + file_name,
-                            Toast.LENGTH_SHORT).show();
-                    cnt = 0;
-                }
-            }
-        });
+        txt.setText(directory_name + "/"
+                + id_name + "/"
+                + image_name.substring(0, image_name.length() - 4));
     }
 
     private void init_text(String temp) {
@@ -182,8 +153,7 @@ public class Show extends Activity implements Button.OnClickListener {
         FirebaseStorage.getInstance().getReference().child(temp).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                TextView txt1 = findViewById(R.id.txt1);
-                txt1.setText(new String(bytes));
+                txt.setText(new String(bytes));
 
                 ProgressBar progressBar = findViewById(R.id.progress);
                 progressBar.setVisibility(View.INVISIBLE);
@@ -200,12 +170,12 @@ public class Show extends Activity implements Button.OnClickListener {
 
     private void init_audio(String temp) {
         //  gs://test-a526e.appspot.com/directory_name/file_name
-
-        FirebaseStorage.getInstance().getReferenceFromUrl(temp).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        System.out.println("bhgggggggggggggggggggggggggggggggggggggggggggggg : " + temp);
+        //        FirebaseStorage.getInstance().getReferenceFromUrl(temp).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+        FirebaseStorage.getInstance().getReference().child(temp).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 try {
-                    audio_player = new MediaPlayer();
                     audio_player.reset();
                     audio_player.setDataSource(uri.toString());
                     audio_player.prepare();
@@ -217,8 +187,8 @@ public class Show extends Activity implements Button.OnClickListener {
                             set_wiget_state2();
                         }
                     });
-                    btn_start.setClickable(true);
-                    btn_forward.setClickable(true);
+                    LinearLayout linearLayout = findViewById(R.id.linear);
+                    linearLayout.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -290,6 +260,15 @@ public class Show extends Activity implements Button.OnClickListener {
                 seek.setProgress(progress);
                 audio_player.pause();
                 break;
+            case R.id.check:
+                if (check.isChecked()) {
+                    img.setVisibility(View.INVISIBLE);
+                    txt.setVisibility(View.VISIBLE);
+                } else {
+                    img.setVisibility(View.VISIBLE);
+                    txt.setVisibility(View.INVISIBLE);
+                }
+                break;
         }
     }
 
@@ -301,6 +280,20 @@ public class Show extends Activity implements Button.OnClickListener {
     private void set_wiget_state2() {
         btn_start.setVisibility(View.VISIBLE);
         btn_pause.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (audio_player != null) {
+            audio_player.pause();
+            SystemClock.sleep(300);
+            audio_player.release();
+        }
+
+        Show.this.finish();
+        //super.onBackPressed();
     }
 }
 

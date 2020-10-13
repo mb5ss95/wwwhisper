@@ -181,7 +181,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
         //(Record) Get Directory Name : story1
         //(Record) Get Storage Reference : gs://project-83e1e.appspot.com/story1
 
-        init_text("[문병수] test.txt");
+        init_text("백설공주.txt");
         //init_text(temp);
     }
 
@@ -218,6 +218,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
         });
     }
 
+    
     private void set_wiget_state1() {
         btn1.setVisibility(View.INVISIBLE);
         btn2.setVisibility(View.VISIBLE);

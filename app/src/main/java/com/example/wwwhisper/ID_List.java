@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,9 +29,9 @@ import java.util.ArrayList;
 public class ID_List extends AppCompatActivity implements View.OnClickListener {
 
     ArrayList<String> id_list;
+    ArrayList<String> image_list;
 
     String directory_name;
-    String image_name;
 
     FloatingActionButton fab_main, fab_sub1, fab_sub2, fab_sub3;
     Animation fab_open, fab_close;
@@ -73,7 +72,6 @@ public class ID_List extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void init_listView() {
-
         // adapterView
         ListView listView = findViewById(R.id.id_list);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -91,7 +89,7 @@ public class ID_List extends AppCompatActivity implements View.OnClickListener {
 
                     Intent intent = new Intent(getApplicationContext(), File_List.class);
                     intent.putExtra("directory_name", directory_name);
-                    intent.putExtra("image_name", image_name);
+                    intent.putExtra("image_list", image_list);
                     intent.putExtra("id_name", id_name);
                     startActivity(intent);
                 }
@@ -114,7 +112,7 @@ public class ID_List extends AppCompatActivity implements View.OnClickListener {
 
     public void init_directory() {
         id_list = new ArrayList<>();
-
+        image_list = new ArrayList<>();
         FirebaseStorage.getInstance().getReference().child(directory_name).listAll()
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
                     @Override
@@ -128,7 +126,8 @@ public class ID_List extends AppCompatActivity implements View.OnClickListener {
                             for (StorageReference item : listResult.getItems()) {
                                 //System.out.println(listResult.getItems());
                                 //[gs://project-83e1e.appspot.com/test/song1.mp3, gs://project-83e1e.appspot.com/test/song2.mp3, gs://project-83e1e.appspot.com/test/song3.mp3, gs://project-83e1e.appspot.com/test/song4.mp3]
-                                image_name = item.getName();
+
+                                image_list.add(item.getName());
                             }
                         }
                         init_listView();
@@ -153,23 +152,28 @@ public class ID_List extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.fab_sub1:
                 toggleFab();
-                startActivity(new Intent(getApplicationContext(), Record.class)
-                        .putExtra("image_name", image_name)
-                        .putExtra("directory_name", directory_name));
+                startActivity(new Intent(getApplicationContext(), Choice_list.class)
+                        .putExtra("image_list", image_list)
+                        .putExtra("directory_name", directory_name)
+                        .putExtra("where", 0));
                 break;
             case R.id.fab_sub2:
                 toggleFab();
-                startActivity(new Intent(getApplicationContext(), Text.class)
-                        .putExtra("image_name", image_name)
-                        .putExtra("directory_name", directory_name));
+                startActivity(new Intent(getApplicationContext(), Choice_list.class)
+                        .putExtra("image_list", image_list)
+                        .putExtra("directory_name", directory_name)
+                        .putExtra("where", 1));
                 break;
             case R.id.fab_sub3:
                 toggleFab();
-                startActivity(new Intent(getApplicationContext(), Upload.class)
-                        .putExtra("directory_name", directory_name));
+                startActivity(new Intent(getApplicationContext(), Choice_list.class)
+                        .putExtra("image_list", image_list)
+                        .putExtra("directory_name", directory_name)
+                        .putExtra("where", 2));
                 break;
         }
     }
+
 
     private void toggleFab() {
         if (isFabOpen) {

@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,18 +22,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
 public class Upload extends AppCompatActivity implements Button.OnClickListener {
 
     String audio_name;
-    String id_name;
+    String chapter;
+    String directory_name;
 
     Uri audio_path;
-
-    StorageReference storageRef;
 
     ImageButton btn2;
 
@@ -59,12 +56,14 @@ public class Upload extends AppCompatActivity implements Button.OnClickListener 
     public void init_data() {
         Intent intent = getIntent();
 
-        storageRef = FirebaseStorage.getInstance().getReference().child(intent.getStringExtra("directory_name"));
+        directory_name = intent.getStringExtra("directory_name");
+        chapter = intent.getStringExtra("chapter");
 
-        //System.out.println("(upload) Get Directory Name : " + directory_name);
-        //System.out.println("(upload) Get Storage Reference : " + storageRef);
-        //(upload) Get Directory Name : story1
-        //(upload) Get Storage Reference : gs://project-83e1e.appspot.com/story1
+
+        System.out.println("(upload) Get Directory Name : " + directory_name);
+        System.out.println("(upload) Get Chapter : " + chapter);
+        //(upload) Get Directory Name : Test World2
+        //(upload) Get Id Name : chapter3
     }
 
     @Override
@@ -90,7 +89,7 @@ public class Upload extends AppCompatActivity implements Button.OnClickListener 
     private void get_name() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(Upload.this);
 
-        dialog.setTitle("닉네임을 입력하고, 챕터를 고르세요.");
+        dialog.setTitle("닉네임을 입력하세요.");
         dialog.setView(R.layout.dialog_edit);
         dialog.setIcon(R.drawable.lib2);
         dialog.setPositiveButton("취소", new DialogInterface.OnClickListener() {
@@ -104,22 +103,20 @@ public class Upload extends AppCompatActivity implements Button.OnClickListener 
                         Dialog f = (Dialog) dialog;
 
                         EditText editText = f.findViewById(R.id.add_id);
-                        Spinner spinner = f.findViewById(R.id.add_name);
 
+                        String ID_name = editText.getText().toString();
 
-                        id_name = "[Audio] " + editText.getText().toString();
-                        String temp = spinner.getSelectedItem().toString();
+                        if (ID_name.isEmpty()) ID_name = "아무개";
 
-                        if (id_name.isEmpty()) id_name = "[Audio] 아무개";
-                        if (temp.isEmpty()) temp = "아무오디오";
 
                         TextView txt = findViewById(R.id.upload_txt1);
-                        txt.setText(id_name + " " + temp);
+                        txt.setText(ID_name + "/" + chapter);
 
-                        audio_name = temp + ".mp3";
+                        directory_name = directory_name + "/" + ID_name;
+                        audio_name = chapter + ".mp3";
 
                         System.out.println("(upload) Get Audio Name & Audio Path : " + audio_name + ", " + audio_path);
-
+                        //(upload) Get Audio Name & Audio Path : null, content://com.android.externalstorage.documents/document/primary%3Arecord.mp3
                         btn2.setVisibility(View.VISIBLE);
                         Toast.makeText(getApplicationContext(), "업로드 하세요!!", Toast.LENGTH_SHORT).show();
                     }
@@ -147,9 +144,9 @@ public class Upload extends AppCompatActivity implements Button.OnClickListener 
             final ProgressDialog progressDialog = new ProgressDialog(Upload.this);
             progressDialog.setTitle("업로드 중 입니다아");
             progressDialog.show();
-            storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(storageRef + "").child(id_name+"/" + file_name);
+            //storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(storageRef + "").child(id_name+"/" + file_name);
 
-            storageRef.putFile(file_path)
+            FirebaseStorage.getInstance().getReference().child(directory_name +"/" + file_name).putFile(file_path)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

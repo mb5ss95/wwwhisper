@@ -11,22 +11,36 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:background="#88B2EF"
+        android:gravity="center"
         android:text="-"
-        android:textColor="#FAFAFA"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center"/>
+        android:textColor="#FAFAFA"
+        android:layout_marginBottom="10dp"/>
+
+    <Switch
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="right"
+        android:layout_weight="1"
+        android:text="Image / Text  "
+        android:textColor="#686868"
+        android:thumbTint="#63B4F4"
+        android:trackTint="#C5C5C5"
+        android:layout_marginRight="10dp"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="13"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:layout_weight="13">
 
         <ProgressBar
+            android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/Widget.MaterialComponents.Snackbar.TextView"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:theme="@style/Widget.MaterialComponents.Snackbar.TextView" />
 
         <ImageView
             android:id="@+id/img"
@@ -34,50 +48,66 @@
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
+        <ScrollView
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txt1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#686868"
+                android:textSize="20dp"
+                android:visibility="invisible" />
+
+        </ScrollView>
+
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="10dp"
         android:layout_weight="2"
         android:orientation="horizontal"
-        android:layout_margin="10dp">
+        android:visibility="invisible">
 
         <SeekBar
-            android:layout_margin="5dp"
             android:id="@+id/seekBar"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="10"
-            android:thumb="@drawable/androidd"
+            android:max="100"
             android:progressBackgroundTint="#A3A3A3"
-            android:max="100" />
+            android:thumb="@drawable/androidd" />
 
 
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/playy"
-                android:layout_gravity="center"
                 android:id="@+id/btn_play"
-                android:visibility="visible"
-                android:clickable="false"
-                android:background="#FAFAFA" />
-
-            <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/pause"
                 android:layout_gravity="center"
+                android:background="#FAFAFA"
+                android:src="@drawable/playy"
+                android:visibility="visible" />
+
+            <ImageButton
                 android:id="@+id/btn_pause"
-                android:visibility="invisible"
-                android:background="#FAFAFA" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="#FAFAFA"
+                android:src="@drawable/pause"
+                android:visibility="invisible" />
 
         </FrameLayout>
 
@@ -85,11 +115,10 @@
             android:id="@+id/btn_forward"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:src="@drawable/forward10"
             android:layout_gravity="center"
-            android:clickable="false"
-            android:background="#FAFAFA"/>
+            android:layout_weight="2"
+            android:background="#FAFAFA"
+            android:src="@drawable/forward10" />
 
 
     </LinearLayout>

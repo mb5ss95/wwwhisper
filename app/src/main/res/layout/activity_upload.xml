@@ -16,9 +16,9 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="[닉네임] 아무오디오"
+        android:text="오디오 파일만 올릴 수 있습니다."
         android:textColor="@android:color/darker_gray"
-        android:textSize="30dp" />
+        android:textSize="20dp" />
 
     <Button
         android:id="@+id/choose"
