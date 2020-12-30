@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.wwwhisper">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
 
     <application
@@ -16,13 +22,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Direc_List">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity
+            android:name="com.example.wwwhisper.Direc_List"
+            android:label="wwwhisper" />
+
+        <activity
+            android:name="com.example.wwwhisper.ID_List"
+            android:label="wwwhisper" />
 
         <activity
             android:name="com.example.wwwhisper.File_List"
@@ -41,10 +56,6 @@
             android:label="wwwhisper" />
 
         <activity
-            android:name="com.example.wwwhisper.ID_List"
-            android:label="wwwhisper" />
-
-        <activity
             android:name="com.example.wwwhisper.Show"
             android:theme="@android:style/Theme.Material.Dialog.NoActionBar" />
 
@@ -52,6 +63,9 @@
             android:name="com.example.wwwhisper.Choice_list"
             android:theme="@android:style/Theme.Material.Dialog.NoActionBar" />
 
+        <activity
+            android:name="com.example.wwwhisper.Connect"
+            android:label="wwwhisper" />
 
     </application>
 
