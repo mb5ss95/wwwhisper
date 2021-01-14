@@ -240,7 +240,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             switch (v.getId()) {
                 case R.id.btn1:
-                    //init_recorder();
+                    init_recorder();
                     ch.setBase(SystemClock.elapsedRealtime());
                     ch.setAnimation(show);
                     ch.setVisibility(View.VISIBLE);
@@ -250,7 +250,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
                     break;
 
                 case R.id.btn2:
-                    //stopRecording();
+                    stopRecording();
                     ch.setVisibility(View.INVISIBLE);
                     ch.stop();
                     //upload_file(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, "[test] test.mp3");
