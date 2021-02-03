@@ -206,7 +206,6 @@ public class Show extends Activity implements View.OnClickListener {
 
     private void init_image(String temp) {
         //  directory_name/file_name
-
         FirebaseStorage.getInstance().getReference().child(temp).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class Choice_list extends Activity {
 
     ArrayList<String> image_list = new ArrayList<>();
-
     String directory_name;
 
     int where;
@@ -39,14 +38,8 @@ public class Choice_list extends Activity {
 
 
         TextView txt = findViewById(R.id.txt);
+        txt.setText("해당 페이지를 고르시오.");
 
-        if (where == 0) {
-            txt.setText("녹음할 챕터를 고르시오.");
-        } else if (where == 1) {
-            txt.setText("텍스트 작성할 챕터를 고르시오.");
-        } else {
-            txt.setText("업로드할 챕터를 고르시오.");
-        }
 
         for (String name : image_list) {
             this.image_list.add(name.substring(0, name.length() - 4));
@@ -74,29 +67,25 @@ public class Choice_list extends Activity {
                     switch (where) {
                         case 0:
                             startActivity(new Intent(getApplicationContext(), Record.class)
-                                    .putExtra("image_list", image_name)
+                                    .putExtra("image_name", image_name)
                                     .putExtra("directory_name", directory_name));
                             Choice_list.this.finish();
                             break;
                         case 1:
                             startActivity(new Intent(getApplicationContext(), Text.class)
-                                    .putExtra("image_list", image_name)
+                                    .putExtra("image_name", image_name)
                                     .putExtra("directory_name", directory_name));
                             Choice_list.this.finish();
                             break;
                         case 2:
                             startActivity(new Intent(getApplicationContext(), Upload.class)
-                                    .putExtra("chapter", image_name)
+                                    .putExtra("image_name", image_name)
                                     .putExtra("directory_name", directory_name));
                             Choice_list.this.finish();
                             break;
-
                     }
-
                 }
             });
         }
     }
-
-
 }

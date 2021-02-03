@@ -28,7 +28,7 @@ import com.google.firebase.storage.UploadTask;
 public class Upload extends AppCompatActivity implements Button.OnClickListener {
 
     String audio_name;
-    String chapter;
+    String image_name;
     String directory_name;
 
     Uri audio_path;
@@ -57,11 +57,11 @@ public class Upload extends AppCompatActivity implements Button.OnClickListener 
         Intent intent = getIntent();
 
         directory_name = intent.getStringExtra("directory_name");
-        chapter = intent.getStringExtra("chapter");
+        image_name = intent.getStringExtra("image_name");
 
 
         System.out.println("(upload) Get Directory Name : " + directory_name);
-        System.out.println("(upload) Get Chapter : " + chapter);
+        System.out.println("(upload) Get Chapter : " + image_name);
         //(upload) Get Directory Name : Test World2
         //(upload) Get Id Name : chapter3
     }
@@ -110,10 +110,10 @@ public class Upload extends AppCompatActivity implements Button.OnClickListener 
 
 
                         TextView txt = findViewById(R.id.upload_txt1);
-                        txt.setText(ID_name + "/" + chapter);
+                        txt.setText(ID_name + "/" + image_name);
 
                         directory_name = directory_name + "/" + ID_name;
-                        audio_name = chapter + ".mp3";
+                        audio_name = image_name + ".mp3";
 
                         System.out.println("(upload) Get Audio Name & Audio Path : " + audio_name + ", " + audio_path);
                         //(upload) Get Audio Name & Audio Path : null, content://com.android.externalstorage.documents/document/primary%3Arecord.mp3
@@ -146,7 +146,7 @@ public class Upload extends AppCompatActivity implements Button.OnClickListener 
             progressDialog.show();
             //storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(storageRef + "").child(id_name+"/" + file_name);
 
-            FirebaseStorage.getInstance().getReference().child(directory_name +"/" + file_name).putFile(file_path)
+            FirebaseStorage.getInstance().getReference().child(directory_name +"/"+ file_name).putFile(file_path)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

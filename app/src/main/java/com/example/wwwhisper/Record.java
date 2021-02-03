@@ -19,16 +19,18 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -45,7 +47,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
     String RECORDED_FILE;
 
     ImageButton btn1, btn2, btn3;
-    ImageView image;
+    ImageView image_view;
 
     Chronometer ch;
 
@@ -59,9 +61,6 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
 
         File file = new File(Environment.getExternalStorageDirectory(), "record.mp3");
         RECORDED_FILE = file.getAbsolutePath();
-
-        System.out.println(Environment.getExternalStorageDirectory() + "555555555555555555555555555555555555555555555");
-        ///storage/emulated/0
 
         init_anim();
         init_wiget();
@@ -104,7 +103,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
 
         ch = findViewById(R.id.ch);
 
-        image = findViewById(R.id.image);
+        image_view = findViewById(R.id.img_view);
 
         btn1.setOnTouchListener(Record.this);
         btn2.setOnTouchListener(Record.this);
@@ -174,17 +173,37 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
         String directory_name = intent.getStringExtra("directory_name");
         image_name = intent.getStringExtra("image_name");
 
-        storageRef = FirebaseStorage.getInstance().getReference().child(directory_name);
-
         System.out.println("(Record) Get Directory Name : " + directory_name);
-        System.out.println("(Record) Get Storage Reference : " + storageRef);
+        System.out.println("(Record) Get Image Name: " + image_name);
         //(Record) Get Directory Name : story1
         //(Record) Get Storage Reference : gs://project-83e1e.appspot.com/story1
 
-        init_text("백설공주.txt");
+        init_image(directory_name+"/"+image_name+".jpg");
         //init_text(temp);
     }
 
+    private void init_image(String temp) {
+        //  directory_name/file_name
+
+        FirebaseStorage.getInstance().getReference().child(temp).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Glide.with(Record.this)
+                            .load(task.getResult())
+                            .into(image_view);
+                    image_view.setVisibility(View.VISIBLE);
+                    btn1.setClickable(true);
+
+                    ProgressBar progressBar = findViewById(R.id.progress);
+                    progressBar.setVisibility(View.INVISIBLE);
+                } else {
+                    //Toast.makeText(mp3.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Record.this, "이미지를 불러올 수 없습니다. 잠시 후 다시 시도하세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
     public void init_title() {
         setTitle("  WWWhisper Project");
@@ -195,6 +214,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
         ab.setDisplayShowHomeEnabled(true);
     }
 
+    /*
     private void init_text(String temp) {
         //long ONE_MEGABYTE = 1024 * 1024;
 
@@ -217,6 +237,8 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
             }
         });
     }
+    */
+
 
     
     private void set_wiget_state1() {
@@ -255,6 +277,7 @@ public class Record extends AppCompatActivity implements Button.OnTouchListener 
                     ch.stop();
                     //upload_file(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, "[test] test.mp3");
                     set_wiget_state2();
+                    Toast.makeText(Record.this, image_name+"으로 저장 되었습니다.", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
